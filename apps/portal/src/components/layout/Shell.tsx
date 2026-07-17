@@ -42,12 +42,12 @@ interface TopbarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ view, setView, role, roleNames = {}, onAccountClick, onLogout }) => {
   const { customers, loadCustomers } = useCustomerStore()
-  const { vmRequests, loadVMRequests } = useVMRequestStore()
-  const { tickets, loadTickets } = useTicketStore()
-  const { alerts, loadAlerts } = useAlertStore()
+  const { vmRequests } = useVMRequestStore()
+  const { tickets } = useTicketStore()
+  const { alerts } = useAlertStore()
   const { invoices, loadInvoices } = useInvoiceStore()
-  const { quotes, loadQuotes } = useQuoteStore()
-  const { addonRequests, loadAddonRequests } = useAddonRequestStore()
+  const { quotes } = useQuoteStore()
+  const { addonRequests } = useAddonRequestStore()
   const pendingKycCount = customers.filter((c: any) => c.kyc_status === 'Pending').length
   const openTicketsCount = tickets.filter((t: any) => t.status === 'Open').length
   const unreadAlertsCount = alerts.filter((a: any) => !a.read).length
@@ -59,12 +59,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ view, setView, role, roleNames
   React.useEffect(() => {
     loadCustomers()
     loadInvoices()
-    loadVMRequests()
-    loadTickets()
-    loadAlerts()
-    loadQuotes()
-    loadAddonRequests()
-  }, [loadCustomers, loadInvoices, loadVMRequests, loadTickets, loadAlerts, loadQuotes, loadAddonRequests])
+  }, [loadCustomers, loadInvoices])
 
   // Calculate request counts based on role and status
   const getRequestCountForRole = () => {
