@@ -14,7 +14,7 @@ export const NetworkView: React.FC<NetworkViewProps> = ({ openVM, openModal }) =
   const { vms, vmsLoading, loadVMs } = useVMStore()
   const { customers, customersLoading, loadCustomers } = useCustomerStore()
   const { toast } = useUIStore()
-  const withIp = vms.filter(v => v.publicIp && v.publicIp !== '—' && v.publicIp !== 'pending')
+  const withIp = vms.filter(v => v.public_ip && v.public_ip !== '—' && v.public_ip !== 'pending')
   const ranges = [
     { range: '203.81.64.0/24', total: 256, used: withIp.length + 18, vlan: 'mixed' },
     { range: '203.81.65.0/24', total: 256, used: 32, vlan: 'reserve' },

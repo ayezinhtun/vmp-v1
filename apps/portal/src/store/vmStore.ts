@@ -30,6 +30,11 @@ export interface VM {
   end_date?: string | null
   backup_enabled?: boolean
   backup_type?: string
+  vlan?: string
+  port_forward?: string
+  firewall_policy?: string
+  priceMonth?: number
+  start?: string
 }
 
 export interface VMRequest {
@@ -98,6 +103,7 @@ export interface VMStoreValue {
   snapshotVM: (id: string, name: string) => Promise<void>
   updateVMTags: (id: string, tags: string[]) => Promise<void>
   updateVMNotes: (id: string, notes: string) => Promise<void>
+  renew: (id: string, months: number) => Promise<void>
 }
 
 const VMContext = createContext<VMStoreValue | null>(null)
@@ -476,7 +482,19 @@ export const VMProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     await loadVMs()
   }, [loadVMs])
 
-  const value: VMStoreValue = { vms, vmsLoading, vmRequests, addonRequests, loadVMs, loadVMRequests, loadAddonRequests, getVMRequest, getAddonRequestsForVM, getVMById, getVMByHostname, addVM, updateVM, deleteVM, startVM, stopVM, restartVM, snapshotVM, updateVMTags, updateVMNotes }
+  const renew = useCallback(async (id: string, months: number) => {
+    const vm = vms.find(v => v.id === id)
+    if (!vm) return
+
+    const newExpiry = new Date(vm.expiry || Date.now())
+    newExpiry.setMonth(newExpiry.getMonth() + months)
+
+    const { error } = await supabase.from('vms').update({ expiry: newExpiry.toISOString() }).eq('id', id)
+    if (error) throw error
+    await loadVMs()
+  }, [vms, loadVMs])
+
+  const value: VMStoreValue = { vms, vmsLoading, vmRequests, addonRequests, loadVMs, loadVMRequests, loadAddonRequests, getVMRequest, getAddonRequestsForVM, getVMById, getVMByHostname, addVM, updateVM, deleteVM, startVM, stopVM, restartVM, snapshotVM, updateVMTags, updateVMNotes, renew }
   return React.createElement(VMContext.Provider, { value }, children as any)
 }
 

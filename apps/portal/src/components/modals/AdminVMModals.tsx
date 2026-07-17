@@ -26,6 +26,7 @@ interface VM {
   node: string
   type: string
   status: string
+  start?: string
 }
 
 // ── New VM Modal ────────────────────────────────────────────────────────
@@ -98,15 +99,16 @@ const NewVMModal: React.FC<NewVMModalProps> = ({ onClose }) => {
     const months: Record<string, number> = { '14-day trial': 0.5, '6 months': 6, '1 year': 12, '2 years': 24 }
     expiry.setMonth(expiry.getMonth() + (months[f.subscription] || 12))
     addVM({
-      ...f,
+      hostname: f.name,
       status: 'Active',
       priceMonth: f.priceMonth || computedPrice,
       expiry: expiry.toISOString().slice(0, 10),
-      firewallPolicy: f.firewallPolicy || `fw-${f.name || 'vm'}`,
+      firewall_policy: f.firewallPolicy || `fw-${f.name || 'vm'}`,
       vlan: f.vlan || `VLAN-${200 + Math.floor(Math.random() * 50)}`,
-      publicIp: f.publicAccess ? (f.publicIp || `203.81.64.${100 + Math.floor(Math.random() * 100)}`) : '—',
+      public_ip: f.publicAccess ? (f.publicIp || `203.81.64.${100 + Math.floor(Math.random() * 100)}`) : '—',
       tags: f.label ? [f.label.toLowerCase()] : [],
       notes: f.notes || (f.purpose ? `Purpose: ${f.purpose}` : ''),
+      start: f.start,
     })
     toast(`VM ${f.name} created and queued for provisioning`, 'ok')
     onClose()
@@ -160,7 +162,7 @@ const NewVMModal: React.FC<NewVMModalProps> = ({ onClose }) => {
                     <div className="fw-6 text-sm">{cust.company}</div>
                     <div className="text-xs text-mute">{cust.id} · {cust.email} · {cust.phone}</div>
                   </div>
-                  <StatusPill status={cust.kyc} />
+                  <StatusPill status={cust.kyc || 'Pending'} />
                 </div>
               )}
               <div className="grid-2" style={{ gap: 12 }}>

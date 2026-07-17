@@ -92,8 +92,6 @@ const AppInner = ({ tw, setTweak }: { tw: TweakState; setTweak: (keyOrEdits: key
   const auth = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
-  const { customers } = useCustomerStore()
-  const { team } = useTeamStore()
   const [minDisplayTimeElapsed, setMinDisplayTimeElapsed] = React.useState(false)
 
   // Ensure minimum display time to prevent flash

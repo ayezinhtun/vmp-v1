@@ -43,6 +43,13 @@ export interface Customer {
   company?: string
   since?: string
   force_password_change?: boolean
+  kyc?: string
+  salesperson?: string
+  nrcFrontFile?: File | null
+  nrcBackFile?: File | null
+  orgCertFile?: File | null
+  orgTaxIdFile?: File | null
+  dirIdFile?: File | null
 }
 
 export interface VM {
@@ -113,6 +120,12 @@ export interface Task {
   vmPrivateIps?: string[]
   vmUsername?: string
   vmPassword?: string
+  qty?: number
+  hostname?: string
+  task_type?: string
+  vcpu?: number
+  ram?: number
+  storage?: number
 }
 
 export interface Invoice {
@@ -285,6 +298,13 @@ export interface NewVMInput {
   expiry?: string
   duration?: number
   legacy_id?: string
+  priceMonth?: number
+  vlan?: string
+  port_forward?: string
+  firewall_policy?: string
+  tags?: string[]
+  notes?: string
+  start?: string
 }
 
 

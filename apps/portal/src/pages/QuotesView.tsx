@@ -24,7 +24,7 @@ const QuotesView = ({ autoOpen = false, onAutoOpenReset, prefillCustomerId, pref
   const { quotes, quotesLoading, addQuote, loadQuotes } = useQuoteStore()
   const { toast } = useUIStore()
   const { user, refreshUser } = useAuthStore()
-  const { vms, loadVMs } = useVMStore()
+  const { loadVMs } = useVMStore()
   const [building, setBuilding] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [addonRequests, setAddonRequests] = useState<any[]>([])
@@ -71,22 +71,6 @@ const QuotesView = ({ autoOpen = false, onAutoOpenReset, prefillCustomerId, pref
     loadAddonRequests()
     loadVMs()
   }, [loadVMs])
-
-  // Helper function to parse billing term string to number of months
-  const parseBillingTermToMonths = (term: string): number => {
-    if (term === 'Monthly') return 1
-    if (term === 'Quarterly') return 3
-    if (term === 'Half Yearly') return 6
-    if (term === 'Yearly') return 12
-
-    // Parse custom terms like "9 months" or "9 months 2 days"
-    const match = term.match(/(\d+)\s*months/)
-    if (match) {
-      return parseInt(match[1], 10)
-    }
-
-    return 1 // Default to 1 month
-  }
 
   // Load current VM data for renewal and change-plan requests
   useEffect(() => {
@@ -257,7 +241,6 @@ const QuotesView = ({ autoOpen = false, onAutoOpenReset, prefillCustomerId, pref
       }
 
       // Parse notes to determine what changed
-      const notes = selectedRequest.notes || ''
       const isSpecChange = selectedRequest.spec_changed || false
       const isBackupChange = selectedRequest.backup_changed || false
 
@@ -608,14 +591,6 @@ const QuotesView = ({ autoOpen = false, onAutoOpenReset, prefillCustomerId, pref
     instance[i] = { ...instance[i], ...patch }
     setSheet({ ...sheet, instance })
   }
-  const addInstance = () => {
-    const isAddon = requestType === 'addon'
-    const next = isAddon
-      ? { spec: 'Service|package', vcpu: 0, ram: 0, storage: 0, qty: 1, unit: 0, term: 'Monthly' as const }
-      : { spec: `Instance ${sheet.instance.length + 1}`, vcpu: 2, ram: 8, storage: 100, qty: 1, unit: 120000, term: 'Monthly' as const }
-    setSheet({ ...sheet, instance: [...sheet.instance, next] })
-  }
-  const _removeInstance = (i: number) => setSheet({ ...sheet, instance: sheet.instance.filter((_, j) => j !== i) })
 
   const updateBackup = (i: number, patch: Partial<BackupLine>) => {
     const backup = [...sheet.backup]
