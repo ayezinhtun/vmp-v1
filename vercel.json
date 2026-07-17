@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd apps/portal && npm run build",
+  "outputDirectory": "apps/portal/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
