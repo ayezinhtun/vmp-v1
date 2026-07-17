@@ -98,7 +98,7 @@ const useTeamStore = (): TeamStoreValue => {
     const inviteToken = crypto.randomUUID()
     
     // Create team_members record with the user_id
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('team_members')
       .insert({
         user_id: userId,

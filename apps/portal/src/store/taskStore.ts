@@ -7,7 +7,8 @@ export interface TaskStoreValue {
   addTask: (t: any) => string
   updateTask: (id: string, patch: Partial<Task>) => void
   removeTask: (id: string) => void
-  moveTask: (id: string, to: number) => void
+  deleteTask: (id: string) => void
+  moveTask: (id: string, status: string) => void
   advanceProvision: (id: string, parsedSpec?: any, addVM?: (vm: any) => string, updateVM?: (id: string, patch: any) => void) => void
   createVMManually: (taskId: string, vmDetails: {
     publicIps: string[]
@@ -39,7 +40,7 @@ const useTaskStore = (): TaskStoreValue => {
     setTasks(s => s.map(t => t.id === id ? { ...t, ...patch } : t))
   }, [])
 
-  const advanceProvision = useCallback((id: string, parsedSpec?: any, addVM?: (vm: any) => string, updateVM?: (id: string, patch: any) => void) => {
+  const advanceProvision = useCallback((id: string, _parsedSpec?: any, _addVM?: (vm: any) => string, updateVM?: (id: string, patch: any) => void) => {
     const t = tasks.find(x => x.id === id)
     if (!t) return
     const stage = (t.wfStage || 0) + 1
@@ -223,6 +224,8 @@ const useTaskStore = (): TaskStoreValue => {
     setTasks(s => s.filter(t => t.id !== id))
   }, [])
 
+  const removeTask = deleteTask
+
   const moveTask = useCallback((id: string, status: string) => {
     const t = tasks.find(t => t.id === id)
     if (!t || t.status === status) return
@@ -231,7 +234,7 @@ const useTaskStore = (): TaskStoreValue => {
 
   return {
     tasks,
-    addTask, updateTask, deleteTask, moveTask, advanceProvision, createVMManually, setTasks, updateVMExpiryForRequest,
+    addTask, updateTask, removeTask, deleteTask, moveTask, advanceProvision, createVMManually, setTasks, updateVMExpiryForRequest,
   }
 }
 

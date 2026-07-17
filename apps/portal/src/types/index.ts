@@ -127,7 +127,7 @@ export interface Invoice {
   due: string
   status: string
   method: string
-  receipt: string
+  receipt: string | null
   invoiceDate?: string
   discount?: number
   quote_id?: string
@@ -248,6 +248,7 @@ export interface NewQuoteInput {
   currency?: 'MMK' | 'USD'
   line_items: any[]
   notes?: string | null
+  created_by?: string | null
 }
 
 export interface AddonRequest {

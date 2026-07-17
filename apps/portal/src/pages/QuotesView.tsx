@@ -615,7 +615,7 @@ const QuotesView = ({ autoOpen = false, onAutoOpenReset, prefillCustomerId, pref
       : { spec: `Instance ${sheet.instance.length + 1}`, vcpu: 2, ram: 8, storage: 100, qty: 1, unit: 120000, term: 'Monthly' as const }
     setSheet({ ...sheet, instance: [...sheet.instance, next] })
   }
-  const removeInstance = (i: number) => setSheet({ ...sheet, instance: sheet.instance.filter((_, j) => j !== i) })
+  const _removeInstance = (i: number) => setSheet({ ...sheet, instance: sheet.instance.filter((_, j) => j !== i) })
 
   const updateBackup = (i: number, patch: Partial<BackupLine>) => {
     const backup = [...sheet.backup]
